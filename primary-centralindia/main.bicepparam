@@ -377,7 +377,7 @@ param identity = {
     }
   }
   keyVault: {
-    name: 'kv-adds-bcp-cin-002' // <-- globally unique, 3-24 chars
+    name: 'kv-adds-bcp-cin-003' // <-- globally unique, 3-24 chars
     skuName: 'standard'
     purgeProtectionEnabled: true
     softDeleteRetentionDays: 90
