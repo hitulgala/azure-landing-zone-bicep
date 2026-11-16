@@ -13,6 +13,6 @@ All notable changes to this project are documented here. The format follows [Kee
 - `scripts/Deploy-LandingZone.ps1`: pre-flight checks, DC password generated once and read back from Key Vault, what-if, confirm-before-deploy, firewall IP check, job summaries in CI.
 - GitHub Actions pipeline: **Bicep What-If** (lint, format check, build, pre-flight checks, what-if) on pull requests and `main`; **Bicep Deploy** started by `workflow_run`, gated by the `prod` environment, deploying the previewed commit. Authentication with OIDC federated credentials; no client secret.
 - Subscription IDs kept out of Git (`scripts/ids.local.ps1` locally, repository variables in CI).
-- Documentation: local deployment guide, CI/CD pipeline, deployment and DR, design decisions, architecture diagrams, contributing guide, security policy, pull request template, Dependabot configuration.
+- Documentation: local deployment guide, CI/CD pipeline, deployment and DR, design decisions, architecture diagrams, contributing guide, security policy, pull request template.
 
 [Unreleased]: https://github.com/hitulgala/azure-landing-zone-bicep/commits/main
