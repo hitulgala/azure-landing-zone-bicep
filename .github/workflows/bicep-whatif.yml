@@ -43,7 +43,7 @@ jobs:
       contents: read       # this job needs no Azure token
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install Bicep CLI ${{ env.BICEP_VERSION }}
         run: |
@@ -92,7 +92,7 @@ jobs:
       ALZ_SUB_WORKLOAD: ${{ vars.ALZ_SUB_WORKLOAD }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install Bicep CLI ${{ env.BICEP_VERSION }}
         run: |

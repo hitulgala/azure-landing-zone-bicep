@@ -56,7 +56,7 @@ jobs:
     steps:
       # workflow_run runs on the latest main: check out the commit that was PREVIEWED
       - name: Checkout the previewed commit
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
