@@ -48,8 +48,8 @@ var denyAllBaseline = [
 ]
 
 // ---------------------------------------------------------------- NSGs (rules inline)
-// Terraform creates rules as separate resources; Bicep declares them inside the
-// NSG so the whole rule set is replaced in one PUT (no drift between rules).
+// Rules are declared inside the NSG, so the whole rule set is written in one
+// PUT: a rule removed from the parameters is removed from Azure too.
 resource nsg 'Microsoft.Network/networkSecurityGroups@2024-05-01' = [
   for n in nsgs: {
     name: n.key
@@ -99,8 +99,8 @@ resource routeTable 'Microsoft.Network/routeTables@2024-05-01' = [
 
 // ---------------------------------------------------------------- VNet + subnets
 // Subnets are declared inline: VNet and subnets are created in one PUT, and
-// re-deployments don't race each other. This also replaces Terraform's
-// separate NSG / route table association resources.
+// re-deployments don't race each other. NSG and route table associations are
+// part of the subnet definition, so no separate association resources exist.
 resource vnet 'Microsoft.Network/virtualNetworks@2024-05-01' = {
   name: network.vnet.name
   location: location

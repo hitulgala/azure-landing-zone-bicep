@@ -1,0 +1,29 @@
+flowchart TB
+  MON["monitoring<br/>RG, Log Analytics, action group"]
+  AL["activity-log<br/>(per subscription, primary)"]
+  SH["service-health-alert<br/>(per distinct subscription)"]
+  HN["network (hub)"]
+  IN["network (identity)"]
+  WN["network (workload)"]
+  DNS["dns<br/>resolver + ruleset"]
+  PDNS["private-dns<br/>zones (primary) / links (secondary)"]
+  FW["firewall"]
+  KV["key-vault<br/>+ DC password secret"]
+  DC["domain-controllers"]
+  RSV["recovery-vault"]
+  PEER["peering<br/>hub-identity, hub-workload<br/>(+ hub-hub in secondary)"]
+  POL["policy<br/>(per subscription, primary)"]
+  MON --> AL
+  MON --> SH
+  MON --> HN & IN & WN
+  HN & IN & WN --> SH
+  HN --> DNS
+  HN --> PDNS
+  HN --> FW
+  MON --> FW
+  PDNS -->|"privatelink.vaultcore zone ID"| KV
+  IN --> KV
+  KV -->|"password stored first"| DC
+  IN --> DC
+  WN --> RSV
+  HN & IN & WN --> PEER

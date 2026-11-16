@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="950" viewBox="0 0 1600 950" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<defs><marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#455a64"/></marker></defs>
+<rect width="1600" height="950" fill="#ffffff"/>
+<text x="800.0" y="42" font-size="24" font-weight="bold" text-anchor="middle" fill="#212121">Azure Landing Zone (Bicep): hub and spoke, two regions, four subscriptions</text>
+<text x="800.0" y="68" font-size="14" font-weight="normal" text-anchor="middle" fill="#546e7a">Deployed as one subscription-scope deployment per region, from a laptop or GitHub Actions</text>
+<rect x="40" y="92" width="470" height="104" rx="10" fill="#f5f5f5" stroke="#616161" stroke-width="2"/>
+<text x="60" y="120" font-size="16" font-weight="bold" text-anchor="start" fill="#212121">GitHub Actions</text>
+<text x="60" y="144" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">Bicep What-If: lint, pre-flight checks, what-if</text>
+<text x="60" y="163" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">prod environment approval (required reviewer)</text>
+<text x="60" y="182" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">Bicep Deploy: same commit, outputs in run Summary</text>
+<rect x="1090" y="92" width="470" height="104" rx="10" fill="#f5f5f5" stroke="#616161" stroke-width="2"/>
+<text x="1110" y="120" font-size="16" font-weight="bold" text-anchor="start" fill="#212121">Your laptop</text>
+<text x="1110" y="144" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">scripts/Deploy-LandingZone.ps1</text>
+<text x="1110" y="163" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">pre-flight checks, password from Key Vault,</text>
+<text x="1110" y="182" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">what-if, confirm, deploy (Az PowerShell)</text>
+<rect x="590" y="100" width="420" height="88" rx="10" fill="#f5f5f5" stroke="#616161" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="800" y="128" font-size="16" font-weight="bold" text-anchor="middle" fill="#212121">Azure Resource Manager</text>
+<text x="800" y="150" font-size="12" font-weight="normal" text-anchor="middle" fill="#37474f">New-AzSubscriptionDeployment at the governance scope</text>
+<text x="800" y="168" font-size="12" font-weight="normal" text-anchor="middle" fill="#37474f">modules scoped to each subscription / resource group</text>
+<line x1="510" y1="144" x2="586" y2="144" stroke="#455a64" stroke-width="2" marker-end="url(#arr)"/>
+<rect x="529.68" y="117" width="36.64" height="19" rx="4" fill="#ffffff" stroke="#cfd8dc"/>
+<text x="548" y="129" font-size="11" font-weight="normal" text-anchor="middle" fill="#37474f">OIDC</text>
+<line x1="1090" y1="144" x2="1014" y2="144" stroke="#455a64" stroke-width="2" marker-end="url(#arr)"/>
+<rect x="1036.76" y="117" width="30.48" height="19" rx="4" fill="#ffffff" stroke="#cfd8dc"/>
+<text x="1052" y="129" font-size="11" font-weight="normal" text-anchor="middle" fill="#37474f">you</text>
+<line x1="800" y1="188" x2="800" y2="226" stroke="#455a64" stroke-width="2" marker-end="url(#arr)"/>
+<rect x="40" y="232" width="740" height="640" rx="14" fill="#fafafa" stroke="#90a4ae" stroke-width="2"/>
+<text x="60" y="262" font-size="18" font-weight="bold" text-anchor="start" fill="#212121">Central India  10.10.0.0/16</text>
+<text x="760" y="262" font-size="13" font-weight="bold" text-anchor="end" fill="#546e7a">PRIMARY</text>
+<rect x="60" y="280" width="700" height="96" rx="10" fill="#ede7f6" stroke="#5e35b1" stroke-width="2"/>
+<text x="80" y="306" font-size="15" font-weight="bold" text-anchor="start" fill="#4527a0">Governance subscription</text>
+<text x="80" y="330" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">Log Analytics workspace  ·  action group  ·  Service Health alert per subscription</text>
+<text x="80" y="349" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">Activity Log forwarding (all 4 subscriptions)  ·  Azure Policy assignments (all 4 subscriptions)</text>
+<rect x="60" y="420" width="700" height="176" rx="10" fill="#e3f2fd" stroke="#1e88e5" stroke-width="2"/>
+<text x="80" y="446" font-size="15" font-weight="bold" text-anchor="start" fill="#0d47a1">Hub subscription  ·  Hub VNet 10.10.0.0/22</text>
+<text x="80" y="474" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">Azure Firewall Standard  10.10.0.4  (DNS proxy, AD and ICMP rules, zones 1-3)</text>
+<text x="80" y="493" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">DNS Private Resolver  inbound 10.10.1.4  ·  outbound + ruleset (AD domain to DCs)</text>
+<text x="80" y="512" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">Private DNS zones: created here (privatelink vault, blob, file, database)</text>
+<text x="80" y="531" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">Route: other region /16 to the other firewall  ·  0.0.0.0/0 to Internet</text>
+<text x="80" y="550" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">GatewaySubnet and AzureBastionSubnet reserved (empty)</text>
+<text x="80" y="569" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">NSG diagnostics and firewall logs to Log Analytics</text>
+<rect x="60" y="656" width="340.0" height="196" rx="10" fill="#e8f5e9" stroke="#43a047" stroke-width="2"/>
+<text x="80" y="682" font-size="15" font-weight="bold" text-anchor="start" fill="#1b5e20">Identity subscription  ·  10.10.4.0/24</text>
+<text x="80" y="710" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">Domain controllers (availability set)</text>
+<text x="80" y="730" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">CINDC01 10.10.4.4  ·  CINDC02 10.10.4.5</text>
+<text x="80" y="750" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">static IPs, separate NTDS disk, no public IP</text>
+<text x="80" y="770" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">Key Vault + private endpoint</text>
+<text x="80" y="790" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">DC admin password (RBAC, purge protection)</text>
+<text x="80" y="810" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">route 0.0.0.0/0 to the firewall</text>
+<rect x="420.0" y="656" width="340.0" height="196" rx="10" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+<text x="440.0" y="682" font-size="15" font-weight="bold" text-anchor="start" fill="#e65100">Workload subscription  ·  10.10.8.0/22</text>
+<text x="440.0" y="710" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">snet-app  ·  snet-data  ·  snet-pe</text>
+<text x="440.0" y="730" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">NSG per subnet, deny-all inbound baseline</text>
+<text x="440.0" y="750" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">Recovery Services Vault</text>
+<text x="440.0" y="770" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">GRS, cross-region restore</text>
+<text x="440.0" y="790" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">daily VM backup policy</text>
+<text x="440.0" y="810" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">route 0.0.0.0/0 to the firewall</text>
+<line x1="410.0" y1="376" x2="410.0" y2="416" stroke="#455a64" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+<rect x="447.8" y="391" width="104.4" height="19" rx="4" fill="#ffffff" stroke="#cfd8dc"/>
+<text x="500.0" y="403" font-size="11" font-weight="normal" text-anchor="middle" fill="#37474f">logs and alerts</text>
+<line x1="230.0" y1="596" x2="230.0" y2="652" stroke="#455a64" stroke-width="3"/>
+<rect x="187.04" y="619" width="85.92" height="19" rx="4" fill="#ffffff" stroke="#cfd8dc"/>
+<text x="230.0" y="631" font-size="11" font-weight="normal" text-anchor="middle" fill="#37474f">VNet peering</text>
+<line x1="590.0" y1="596" x2="590.0" y2="652" stroke="#455a64" stroke-width="3"/>
+<rect x="547.04" y="619" width="85.92" height="19" rx="4" fill="#ffffff" stroke="#cfd8dc"/>
+<text x="590.0" y="631" font-size="11" font-weight="normal" text-anchor="middle" fill="#37474f">VNet peering</text>
+<rect x="820" y="232" width="740" height="640" rx="14" fill="#fafafa" stroke="#90a4ae" stroke-width="2"/>
+<text x="840" y="262" font-size="18" font-weight="bold" text-anchor="start" fill="#212121">South India  10.20.0.0/16</text>
+<text x="1540" y="262" font-size="13" font-weight="bold" text-anchor="end" fill="#546e7a">SECONDARY (active-passive)</text>
+<rect x="840" y="280" width="700" height="96" rx="10" fill="#ede7f6" stroke="#5e35b1" stroke-width="2"/>
+<text x="860" y="306" font-size="15" font-weight="bold" text-anchor="start" fill="#4527a0">Governance subscription</text>
+<text x="860" y="330" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">Log Analytics workspace  ·  action group  ·  Service Health alert per subscription</text>
+<text x="860" y="349" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">Activity Log forwarding and Azure Policy are handled by the primary region</text>
+<rect x="840" y="420" width="700" height="176" rx="10" fill="#e3f2fd" stroke="#1e88e5" stroke-width="2"/>
+<text x="860" y="446" font-size="15" font-weight="bold" text-anchor="start" fill="#0d47a1">Hub subscription  ·  Hub VNet 10.20.0.0/22</text>
+<text x="860" y="474" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">Azure Firewall Standard  10.20.0.4  (DNS proxy, AD and ICMP rules, no zones in region)</text>
+<text x="860" y="493" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">DNS Private Resolver  inbound 10.20.1.4  ·  outbound + ruleset (AD domain to DCs)</text>
+<text x="860" y="512" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">Private DNS zones: hub VNet linked to the primary zones</text>
+<text x="860" y="531" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">Route: other region /16 to the other firewall  ·  0.0.0.0/0 to Internet</text>
+<text x="860" y="550" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">GatewaySubnet and AzureBastionSubnet reserved (empty)</text>
+<text x="860" y="569" font-size="13" font-weight="normal" text-anchor="start" fill="#37474f">NSG diagnostics and firewall logs to Log Analytics</text>
+<rect x="840" y="656" width="340.0" height="196" rx="10" fill="#e8f5e9" stroke="#43a047" stroke-width="2"/>
+<text x="860" y="682" font-size="15" font-weight="bold" text-anchor="start" fill="#1b5e20">Identity subscription  ·  10.20.4.0/24</text>
+<text x="860" y="710" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">Domain controllers (availability set)</text>
+<text x="860" y="730" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">SINDC01 10.20.4.4  ·  SINDC02 10.20.4.5</text>
+<text x="860" y="750" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">static IPs, separate NTDS disk, no public IP</text>
+<text x="860" y="770" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">Key Vault + private endpoint</text>
+<text x="860" y="790" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">DC admin password (RBAC, purge protection)</text>
+<text x="860" y="810" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">route 0.0.0.0/0 to the firewall</text>
+<rect x="1200.0" y="656" width="340.0" height="196" rx="10" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+<text x="1220.0" y="682" font-size="15" font-weight="bold" text-anchor="start" fill="#e65100">Workload subscription  ·  10.20.8.0/22</text>
+<text x="1220.0" y="710" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">snet-app  ·  snet-data  ·  snet-pe</text>
+<text x="1220.0" y="730" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">NSG per subnet, deny-all inbound baseline</text>
+<text x="1220.0" y="750" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">Recovery Services Vault</text>
+<text x="1220.0" y="770" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">GRS, cross-region restore</text>
+<text x="1220.0" y="790" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">daily VM backup policy</text>
+<text x="1220.0" y="810" font-size="12.5" font-weight="normal" text-anchor="start" fill="#37474f">route 0.0.0.0/0 to the firewall</text>
+<line x1="1190.0" y1="376" x2="1190.0" y2="416" stroke="#455a64" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+<rect x="1227.8" y="391" width="104.4" height="19" rx="4" fill="#ffffff" stroke="#cfd8dc"/>
+<text x="1280.0" y="403" font-size="11" font-weight="normal" text-anchor="middle" fill="#37474f">logs and alerts</text>
+<line x1="1010.0" y1="596" x2="1010.0" y2="652" stroke="#455a64" stroke-width="3"/>
+<rect x="967.04" y="619" width="85.92" height="19" rx="4" fill="#ffffff" stroke="#cfd8dc"/>
+<text x="1010.0" y="631" font-size="11" font-weight="normal" text-anchor="middle" fill="#37474f">VNet peering</text>
+<line x1="1370.0" y1="596" x2="1370.0" y2="652" stroke="#455a64" stroke-width="3"/>
+<rect x="1327.04" y="619" width="85.92" height="19" rx="4" fill="#ffffff" stroke="#cfd8dc"/>
+<text x="1370.0" y="631" font-size="11" font-weight="normal" text-anchor="middle" fill="#37474f">VNet peering</text>
+<line x1="760" y1="508" x2="840" y2="508" stroke="#1e88e5" stroke-width="5"/>
+<rect x="750.88" y="473" width="98.24000000000001" height="19" rx="4" fill="#ffffff" stroke="#cfd8dc"/>
+<text x="800" y="485" font-size="11" font-weight="normal" text-anchor="middle" fill="#37474f">global peering</text>
+<rect x="763.2" y="529" width="73.60000000000001" height="19" rx="4" fill="#ffffff" stroke="#cfd8dc"/>
+<text x="800" y="541" font-size="11" font-weight="normal" text-anchor="middle" fill="#37474f">hub to hub</text>
+<rect x="200" y="888" width="22" height="16" rx="3" fill="#ede7f6" stroke="#5e35b1" stroke-width="2"/>
+<text x="232" y="902" font-size="13" font-weight="normal" text-anchor="start" fill="#212121">Governance</text>
+<rect x="450" y="888" width="22" height="16" rx="3" fill="#e3f2fd" stroke="#1e88e5" stroke-width="2"/>
+<text x="482" y="902" font-size="13" font-weight="normal" text-anchor="start" fill="#212121">Hub (connectivity)</text>
+<rect x="700" y="888" width="22" height="16" rx="3" fill="#e8f5e9" stroke="#43a047" stroke-width="2"/>
+<text x="732" y="902" font-size="13" font-weight="normal" text-anchor="start" fill="#212121">Identity</text>
+<rect x="950" y="888" width="22" height="16" rx="3" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+<text x="982" y="902" font-size="13" font-weight="normal" text-anchor="start" fill="#212121">Workload</text>
+<rect x="1200" y="888" width="22" height="16" rx="3" fill="#f5f5f5" stroke="#616161" stroke-width="2"/>
+<text x="1232" y="902" font-size="13" font-weight="normal" text-anchor="start" fill="#212121">Delivery</text>
+<text x="800.0" y="934" font-size="12" font-weight="normal" text-anchor="middle" fill="#78909c">IP addresses are the defaults in main.bicepparam. Domain controllers are deployed ready for promotion; AD DS is configured manually.</text>
+</svg>

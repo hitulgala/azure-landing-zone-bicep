@@ -11,10 +11,9 @@
 // enforce = false -> "DoNotEnforce": evaluated and reported, nothing blocked (audit).
 // enforce = true  -> Deny / Modify effects are active.
 //
-// Terraform looks definitions up by display name (data source). Bicep has no
-// data sources, so builtInPolicyDefinitions maps each display name to its
-// fixed GUID and to the roles its managed identity needs - the same lookup,
-// resolved in the parameter file instead of at plan time.
+// Built-in definitions are referenced by their fixed GUIDs (identical in every
+// tenant): builtInPolicyDefinitions maps each display name used in the
+// parameters to its GUID and to the roles its managed identity needs.
 // Scope   : subscription.
 // =============================================================================
 targetScope = 'subscription'

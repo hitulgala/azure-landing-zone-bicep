@@ -5,10 +5,6 @@
 //   SECONDARY (createZones = false): links its hub VNet to the existing zones
 // Scope: resourceGroup(<hub subscription>, privateDns.resourceGroupName),
 //        i.e. the PRIMARY hub network RG in both stacks.
-//
-// Note: in the Terraform repo the secondary creates NO links (the link
-// resource iterates over created zones only). This module implements the
-// documented design (decision 5) for both regions.
 // =============================================================================
 import { privateDnsType } from '../types.bicep'
 

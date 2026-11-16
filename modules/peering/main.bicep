@@ -2,9 +2,9 @@
 // Module  : peering
 // Purpose : Creates BOTH halves of a VNet peering (A->B and B->A).
 //
-// Terraform passes two provider aliases (side_a, side_b). In Bicep each half
-// is a nested deployment scoped to its own subscription and resource group,
-// so one module call still owns both halves. For hub-to-hub peering (same
+// Each half is a nested deployment scoped to its own subscription and
+// resource group, so one module call owns both halves even when the two
+// VNets live in different subscriptions. For hub-to-hub peering (same
 // subscription) pass the same subscription ID on both sides.
 // Scope   : subscription (any; the halves set their own scope).
 // =============================================================================

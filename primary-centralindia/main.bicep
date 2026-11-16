@@ -4,10 +4,9 @@
 // This file only WIRES modules together. It contains no environment values:
 // every name, address, port and setting comes from main.bicepparam.
 //
-// Terraform: four aliased azurerm providers.
-// Bicep    : one deployment at the governance subscription scope; every module
-//            is pointed at its subscription with subscription(<id>) or
-//            resourceGroup(<id>, <name>).
+// One deployment runs at the GOVERNANCE subscription scope; every module is
+// pointed at its subscription with subscription(<id>) or
+// resourceGroup(<id>, <name>), so a single deployment spans all four.
 // =============================================================================
 targetScope = 'subscription'
 
@@ -313,7 +312,7 @@ output hubNetworkResourceGroupName string = hubNetwork.outputs.resourceGroupName
 output hubVnetName string = hubNetwork.outputs.vnetName
 @description('Verify it equals the primary firewall IP referenced in the SECONDARY params.')
 output firewallPrivateIp string = hubFirewall.outputs.privateIpAddress
-@description('Replaces the Terraform check block; Deploy-LandingZone.ps1 warns when false.')
+@description('False when Azure assigned another IP; Deploy-LandingZone.ps1 warns.')
 output firewallIpMatchesExpected bool = hubFirewall.outputs.privateIpAddress == expectedFirewallPrivateIp
 output domainControllerIps object = domainControllers.outputs.privateIps
 output keyVaultName string = keyVault.outputs.name

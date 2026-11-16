@@ -1,0 +1,13 @@
+flowchart TB
+  TV["main.bicepparam (primary)<br/>mandatoryTagNames + policies<br/>+ builtInPolicyDefinitions (GUIDs)"]
+  subgraph PM["policy module (one call per subscription)"]
+    T1["Require tag on resource groups<br/>Deny"]
+    T2["Inherit tag from resource group<br/>Modify, managed identity"]
+    T3["Allowed locations / VM SKUs /<br/>no public IP on NICs<br/>audit first"]
+  end
+  TV --> PM
+  PM --> S1["Governance subscription"]
+  PM --> S2["Hub subscription"]
+  PM --> S3["Identity subscription"]
+  PM --> S4["Workload subscription"]
+  T2 -->|"Contributor at subscription scope<br/>(roleDefinitionIds in the parameters)"| ID["Policy managed identity"]

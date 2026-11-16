@@ -1,0 +1,10 @@
+# Keeps the GitHub Actions used by the workflows (checkout, azure/login) up to date.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ci
+    labels: [dependencies]
