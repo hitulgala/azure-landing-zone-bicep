@@ -7,12 +7,11 @@
 //             - The password stored as a secret
 //             - Diagnostics to Log Analytics
 //
-// Differences from Terraform:
-//   * No random_password: the deploy script generates the password once (or
-//     reads it back from this vault) and passes it in as a secure parameter.
-//   * No time_sleep for RBAC propagation: ARM writes the secret through the
-//     control plane, which doesn't need the data-plane role. The role exists
-//     so the deploy script can read the password back on the next run.
+// Password handling: Bicep cannot generate passwords, so the deploy script
+// generates one on the first run (or reads it back from this vault on later
+// runs) and passes it in as a secure parameter. ARM writes the secret through
+// the control plane, so no data-plane role is needed to store it; the
+// Secrets Officer role exists so the script can read the password back.
 // Scope   : identity network resource group.
 // =============================================================================
 import { keyVaultType } from '../types.bicep'

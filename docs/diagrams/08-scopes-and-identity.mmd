@@ -1,0 +1,14 @@
+flowchart TB
+  subgraph WHO["Who deploys"]
+    U["Your account<br/>(laptop: Connect-AzAccount)"]
+    P["sp-alz-bicep-github<br/>(GitHub Actions: OIDC, no secret)"]
+  end
+  D["One subscription deployment<br/>New-AzSubscriptionDeployment<br/>at the GOVERNANCE scope<br/>main.bicep + main.bicepparam"]
+  U --> D
+  P --> D
+  D -->|"scope: subscription(governance)"| G["Governance<br/>monitoring, policy, activity log"]
+  D -->|"scope: subscription(hub) /<br/>resourceGroup(hub, rg)"| H["Hub<br/>network, firewall, dns"]
+  D -->|"scope: subscription(identity) /<br/>resourceGroup(identity, rg)"| I["Identity<br/>network, key-vault, DCs"]
+  D -->|"scope: subscription(workload) /<br/>resourceGroup(workload, rg)"| W["Workload<br/>network, recovery-vault"]
+  ARM[("Azure Resource Manager<br/>source of truth<br/>no state file")]
+  G & H & I & W --- ARM

@@ -1,0 +1,8 @@
+flowchart LR
+  B["feature branch"] --> PR["pull request"]
+  PR --> WI1["Bicep What-If<br/>lint: format, lint, build<br/>what-if: pre-flight + what-if<br/>(run Summary)"]
+  WI1 -->|"review, merge"| M["main"]
+  M --> WI2["Bicep What-If<br/>(push to main)"]
+  WI2 -->|"workflow_run<br/>success, push, main"| AP{"prod environment<br/>required reviewer"}
+  AP -->|"approve"| DEP["Bicep Deploy<br/>same commit<br/>OIDC login, deploy,<br/>outputs in Summary"]
+  AP -->|"reject"| STOP["nothing deployed"]

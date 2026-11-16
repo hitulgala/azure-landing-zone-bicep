@@ -1,10 +1,10 @@
 // =============================================================================
-// Shared user-defined types. They mirror the variable schemas of the
-// Terraform repo one-to-one (snake_case keys become camelCase), so a value in
-// terraform.tfvars has an obvious home in main.bicepparam.
+// Shared user-defined types: the schema of every stack parameter.
+// Typed parameters fail at build time on a wrong key or type, long before
+// anything reaches Azure.
 //
-// Terraform map(object(...))  ->  Bicep { *: someType }  (object with any keys)
-// Terraform optional(x, d)    ->  Bicep `x?` with the default applied in code
+// { *: someType }  object with any keys (a map): subnets, NSGs, servers...
+// `x?`             optional property; the default is applied in the module
 // =============================================================================
 
 // ---- Common ---------------------------------------------------------------------
@@ -332,7 +332,7 @@ type secondaryPeeringsType = {
 }
 
 @export()
-@description('Where the PRIMARY hub lives (primary stack outputs). Replaces the Terraform data sources.')
+@description('Where the PRIMARY hub lives (primary stack outputs). The secondary references it by name.')
 type primaryHubType = {
   resourceGroupName: string
   vnetName: string

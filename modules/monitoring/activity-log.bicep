@@ -1,6 +1,5 @@
 // Forwards one subscription's Activity Log to a Log Analytics workspace.
-// Terraform: azurerm_monitor_diagnostic_setting.activity_log (for_each subscription).
-// Bicep: the stack calls this module once per subscription with
+// The stack calls this module once per subscription with
 // scope: subscription(<id>), because a subscription-level diagnostic
 // setting must be deployed at that subscription's scope.
 targetScope = 'subscription'

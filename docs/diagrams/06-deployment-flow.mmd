@@ -1,0 +1,7 @@
+flowchart LR
+  S0["0. Prepare<br/>tools, roles on 4 subscriptions,<br/>resource providers,<br/>ids.local.ps1 / GitHub variables"]
+  S1["1. Primary region<br/>pre-flight checks, what-if,<br/>approve, deploy<br/>(laptop or pipeline)"]
+  S2["2. Secondary region<br/>after the primary:<br/>primaryHub from outputs,<br/>what-if, deploy"]
+  S3["3. Verify<br/>firewall IP output,<br/>peerings, DNS chain"]
+  S4["4. Post-deploy<br/>promote DCs, AD sites,<br/>review policy compliance"]
+  S0 --> S1 --> S2 --> S3 --> S4

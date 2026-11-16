@@ -6,16 +6,16 @@
 
 .DESCRIPTION
     1. Checks the tooling and loads tenant/subscription IDs from scripts/ids.local.ps1.
-    2. Compiles main.bicepparam and runs the checks the Terraform version ran
-       at plan time as variable validations (mandatory tags, NSG / route table
+    2. Compiles main.bicepparam and runs cross-field pre-flight checks that
+       Bicep types cannot express (mandatory tags, NSG / route table
        references, DC placement, forwarding-rule dots, policy definitions...).
     3. Resolves the DC admin password: reads it back from Key Vault if the vault
        already exists, otherwise generates a strong one. Bicep cannot generate
        passwords, and a new password on every run would not match existing DCs.
     4. Runs New-AzSubscriptionDeployment with -WhatIf (preview) or -Confirm
-       (shows the what-if, then asks before deploying, like terraform apply).
+       (shows the what-if, then asks before deploying).
     5. Warns if Azure assigned the firewall a different IP than expected
-       (replaces the Terraform check block).
+       (the firewallIpMatchesExpected output).
 
 .EXAMPLE
     ./scripts/Deploy-LandingZone.ps1 -Stack primary-centralindia                 # preview only
@@ -97,8 +97,7 @@ foreach ($name in 'ALZ_TENANT_ID', 'ALZ_SUB_GOVERNANCE', 'ALZ_SUB_HUB', 'ALZ_SUB
 }
 
 # ---- 3. Parameters and pre-flight checks -----------------------------------------------
-# Terraform ran these as variable validations at plan time. Bicep types catch
-# wrong keys and types; the cross-field rules below need a script.
+# Bicep types catch wrong keys and types; the cross-field rules below need a script.
 Write-Step "Compiling $Stack/main.bicepparam and running pre-flight checks"
 $params   = Get-StackParameters
 $location = $params.location.value

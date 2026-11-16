@@ -1,5 +1,5 @@
 // ==============================================================================
-// primary-centralindia  |  ALL deployment values live in this file (= terraform.tfvars).
+// primary-centralindia  |  ALL deployment values live in this file.
 // IP plan:  Central India 10.10.0.0/16   South India 10.20.0.0/16
 // Search for "<--" to find the values you must change.
 //
@@ -377,7 +377,7 @@ param identity = {
     }
   }
   keyVault: {
-    name: 'kv-adds-bcp-cin-002' // <-- globally unique, 3-24 chars
+    name: 'kv-adds-bcp-cin-003' // <-- globally unique, 3-24 chars
     skuName: 'standard'
     purgeProtectionEnabled: true
     softDeleteRetentionDays: 90
@@ -576,9 +576,8 @@ param policyDefinitionNames = {
 }
 
 // Built-in policy definitions, keyed by the display names used above and in
-// 'policies'. Terraform resolves display names with a data source at plan time;
-// Bicep has no data sources, so the fixed GUIDs (identical in every tenant) are
-// listed here. roleDefinitionIds = roles the policy's managed identity needs
+// 'policies'. Built-in definitions are referenced by their fixed GUIDs, which are
+// identical in every tenant. roleDefinitionIds = roles the policy's managed identity needs
 // (taken from the definition; Contributor for the inherit-tag Modify policy).
 // Add an entry here before using a new definitionDisplayName in 'policies'.
 param builtInPolicyDefinitions = {
