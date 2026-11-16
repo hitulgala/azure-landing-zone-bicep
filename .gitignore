@@ -1,0 +1,17 @@
+# Local IDs and secrets - never committed
+scripts/ids.local.ps1
+*.local.ps1
+.env
+
+# Compiled ARM JSON (bicep build output) - the .bicep files are the source
+**/main.json
+modules/**/*.json
+
+# Editor and OS files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+
+secondary-southindia/

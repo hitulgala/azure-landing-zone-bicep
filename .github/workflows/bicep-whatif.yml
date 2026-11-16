@@ -1,0 +1,112 @@
+# ==============================================================================
+# Bicep What-If  (the "terraform plan" of this repo)
+#   pull request into main : lint -> what-if (review only, nothing is deployed)
+#   push to main           : lint -> what-if -> hands over to "Bicep Deploy"
+#   manual run             : lint -> what-if for the chosen stack
+#
+# Unlike a Terraform plan, a what-if is a prediction, not an artifact that can be
+# applied. Bicep Deploy therefore deploys the SAME COMMIT, not a saved plan.
+# ==============================================================================
+name: Bicep What-If
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      stack:
+        description: Stack to preview
+        type: choice
+        options: [primary-centralindia, secondary-southindia]
+        default: primary-centralindia
+
+permissions:
+  contents: read
+  id-token: write          # OIDC: GitHub issues a short-lived token, Azure trusts it
+
+concurrency:
+  group: bicep-whatif-${{ github.event.pull_request.number || github.ref }}-${{ inputs.stack || 'primary-centralindia' }}
+  cancel-in-progress: true # a newer push replaces an older, still-running preview
+
+env:
+  STACK: ${{ inputs.stack || 'primary-centralindia' }}
+  BICEP_VERSION: ${{ vars.BICEP_VERSION }}
+
+jobs:
+  # ---------------------------------------------------------------- No Azure access needed
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read       # this job needs no Azure token
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Bicep CLI ${{ env.BICEP_VERSION }}
+        run: |
+          curl -fsSLo bicep "https://github.com/Azure/bicep/releases/download/${BICEP_VERSION}/bicep-linux-x64"
+          chmod +x bicep && sudo mv bicep /usr/local/bin/bicep
+          bicep --version
+
+      # = terraform fmt -check -recursive
+      - name: Format check
+        run: |
+          failed=0
+          while IFS= read -r f; do
+            if ! bicep format --stdout "$f" | diff -q - "$f" > /dev/null; then
+              echo "::error file=$f::Not formatted. Run: bicep format $f"
+              failed=1
+            fi
+          done < <(find . -name '*.bicep' -o -name '*.bicepparam')
+          exit $failed
+
+      # = terraform validate (+ linter rules from bicepconfig.json)
+      - name: Lint and build
+        run: |
+          find . -name '*.bicep' -o -name '*.bicepparam' | while IFS= read -r f; do
+            echo "lint $f"; bicep lint "$f"
+          done
+          for stack in primary-centralindia secondary-southindia; do
+            bicep build "$stack/main.bicep" --stdout > /dev/null
+            bicep build-params "$stack/main.bicepparam" --stdout > /dev/null
+          done
+
+  # ---------------------------------------------------------------- What-if against Azure
+  whatif:
+    name: what-if
+    needs: lint
+    runs-on: ubuntu-latest
+    env:
+      ALZ_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+      ALZ_SUB_GOVERNANCE: ${{ vars.ALZ_SUB_GOVERNANCE }}
+      ALZ_SUB_HUB: ${{ vars.ALZ_SUB_HUB }}
+      ALZ_SUB_IDENTITY: ${{ vars.ALZ_SUB_IDENTITY }}
+      ALZ_SUB_WORKLOAD: ${{ vars.ALZ_SUB_WORKLOAD }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Bicep CLI ${{ env.BICEP_VERSION }}
+        run: |
+          curl -fsSLo bicep "https://github.com/Azure/bicep/releases/download/${BICEP_VERSION}/bicep-linux-x64"
+          chmod +x bicep && sudo mv bicep /usr/local/bin/bicep
+
+      # Only the three modules the script needs: much faster than the full Az module.
+      - name: Install Az PowerShell modules
+        shell: pwsh
+        run: Install-Module Az.Accounts, Az.Resources, Az.KeyVault -Scope CurrentUser -Force -Repository PSGallery
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.ALZ_SUB_GOVERNANCE }}
+          enable-AzPSSession: true
+
+      - name: Pre-flight checks + what-if (${{ env.STACK }})
+        shell: pwsh
+        run: ./scripts/Deploy-LandingZone.ps1 -Stack $env:STACK -Mode WhatIf

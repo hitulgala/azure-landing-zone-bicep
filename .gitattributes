@@ -1,0 +1,5 @@
+# Normalise line endings: LF in the repo, so diffs are clean on Windows and Linux
+* text=auto eol=lf
+*.ps1 text eol=crlf
+*.png binary
+*.jpg binary

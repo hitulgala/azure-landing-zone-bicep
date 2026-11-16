@@ -1,0 +1,13 @@
+# ==============================================================================
+# Copy to scripts/ids.local.ps1 and fill in your own IDs.
+# ids.local.ps1 is git-ignored: it NEVER goes to GitHub.
+# Deploy-LandingZone.ps1 loads it; main.bicepparam reads the values with
+# readEnvironmentVariable(). In CI these become GitHub repository variables.
+#
+# Single-subscription sandbox? Use the same subscription ID for all four.
+# ==============================================================================
+$env:ALZ_TENANT_ID      = '00000000-0000-0000-0000-000000000000'
+$env:ALZ_SUB_GOVERNANCE = '00000000-0000-0000-0000-000000000000'
+$env:ALZ_SUB_HUB        = '00000000-0000-0000-0000-000000000000'
+$env:ALZ_SUB_IDENTITY   = '00000000-0000-0000-0000-000000000000'
+$env:ALZ_SUB_WORKLOAD   = '00000000-0000-0000-0000-000000000000'
