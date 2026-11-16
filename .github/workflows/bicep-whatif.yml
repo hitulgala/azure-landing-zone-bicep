@@ -70,6 +70,11 @@ jobs:
             echo "lint $f"; bicep lint "$f"
           done
           for stack in primary-centralindia secondary-southindia; do
+            if [ ! -f "$stack/main.bicep" ]; then
+              echo "::notice::$stack is not in the repo - skipped"
+              continue
+            fi
+            echo "build $stack"
             bicep build "$stack/main.bicep" --stdout > /dev/null
             bicep build-params "$stack/main.bicepparam" --stdout > /dev/null
           done
